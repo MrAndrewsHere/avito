@@ -12,20 +12,9 @@ class AdViewRequestTest extends RequestTest
     protected string $method = 'get';
     protected $data = [
         'sortBy' => 'price',
-        'sortVal' => 'desc'
+        'descending' => false
     ];
 
-    /** @test */
-    public function sort_filed_required()
-    {
-        $this->assertGet('sortBy', null);
-    }
-
-    /** @test */
-    public function sortVal_filed_required()
-    {
-        $this->assertGet('sortVal', null);
-    }
 
     /** @test */
     public function sortBy_filed_in_array()
@@ -33,11 +22,6 @@ class AdViewRequestTest extends RequestTest
         $this->assertGet('sortBy','test');
     }
 
-    /** @test */
-    public function sortVal_filed_in_array()
-    {
-        $this->assertGet('sortVal','test');
-    }
 
 
 }

@@ -30,7 +30,7 @@ class AdService
     {
         $this->output = Ads::with(['preview'])
             ->view()
-            ->sorted($this->input['sortBy'] ?? null, $this->input['sortVal'] ?? null)
+            ->sorted($this->input['sortBy'] ?? null, (bool)$this->input['descending'] ?? null)
             ->paginate(10)->appends($this->request->query());
         return $this;
     }
@@ -39,7 +39,7 @@ class AdService
     {
         $this->output = Ads::with(['photo', 'preview'])
             ->find($this->input['id'])
-            ->only(array_merge(['id', 'preview', 'cost'], $this->input['fields'] ?? []));
+            ->only(array_merge(['id', 'name','preview', 'price'], $this->input['fields'] ?? []));
         return $this;
     }
 

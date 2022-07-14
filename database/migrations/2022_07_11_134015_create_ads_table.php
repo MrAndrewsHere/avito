@@ -16,7 +16,7 @@ class CreateAdsTable extends Migration
         Schema::create('ads',function (Blueprint $table){
             $table->bigIncrements('id');
             $table->string('name','200');
-            $table->string('description','1000');
+            $table->string('description','1000')->nullable();
             $table->float('price');
             $table->timestamps();
         });

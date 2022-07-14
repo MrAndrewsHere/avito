@@ -26,7 +26,7 @@ class AdStoreRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'min:5', 'max:200'],
-            'description' => ['string', 'max:1000'],
+            'description' => ['nullable','string', 'max:1000'],
             'photo' => ['array', 'max:3'],
             'photo.*.url' => ['url','distinct:strict'],
             'price' => ['required','numeric']

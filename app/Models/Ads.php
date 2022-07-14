@@ -11,7 +11,7 @@ class Ads extends Model
     use HasFactory;
 
 
-    protected $fillable = ['name', 'description', 'price', 'created_at','updated_at'];
+    protected $fillable = ['name', 'description', 'price', 'created_at', 'updated_at'];
 
     public function getPriceAttribute()
     {
@@ -34,12 +34,12 @@ class Ads extends Model
         return $query->select('id', 'name', 'price');
     }
 
-    public function scopeSorted($query, $sortBy = null, $sortVal = 'asc')
+    public function scopeSorted($query, $sortBy = null, $descending = false)
     {
         if (!$sortBy) {
             return $query;
         }
-        return $query->orderBy($sortBy, $sortVal);
+        return $query->orderBy($sortBy, !$descending ? 'desc' : 'asc');
     }
 
 }

@@ -24,10 +24,10 @@ class APITest extends TestCase
         });
 
         collect(['price', 'created_at'])
-            ->crossJoin(collect(['asc', 'desc']))
-            ->map(fn($i) => array_combine(['sortBy', 'sortVal'], array_values($i)))
+            ->crossJoin(collect([1,0]))
+            ->map(fn($i) => array_combine(['sortBy', 'descending'], array_values($i)))
             ->each(function ($payload) use ($ads, $count) {
-                $expected = $ads->sortBy($payload['sortBy'], SORT_REGULAR, $payload['sortVal'] === 'desc' )->take(10)->map(fn($i) => [
+                $expected = $ads->sortBy($payload['sortBy'], SORT_REGULAR, !(bool)$payload['descending']  )->take(10)->map(fn($i) => [
                     'id' => $i['id'],
                     'name' => $i['name'],
                     'price' => $i['price'],
@@ -63,7 +63,7 @@ class APITest extends TestCase
     public function can_get_one_ad()
     {
         $ad = Ads::factory()->create();
-        $default = ['id', 'preview', 'cost'];
+        $default = ['id', 'preview', 'price'];
         $optional = ['description', 'photo'];
         $response = $this->getJson(
             $this->routePrefix . 'ad?'

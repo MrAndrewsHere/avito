@@ -26,8 +26,15 @@ class AdViewRequest extends FormRequest
     public function rules()
     {
         return [
-            'sortBy' => ['required_with:sortVal', Rule::in(['price', 'created_at'])],
-            'sortVal' => ['required_with:sortBy', Rule::in(['asc', 'desc'])],
+            'sortBy' => [Rule::in(['price', 'created_at'])],
+            'descending' => ['boolean'],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'descending' => (bool)$this->descending,
+        ]);
     }
 }
