@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Ads;
 use App\Models\Photo;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AdService
@@ -14,13 +15,7 @@ class AdService
     private $output = [];
     private $statusCode = 200;
 
-
-    public static function make(): AdService
-    {
-        return new self(...func_get_args());
-    }
-
-    public function __construct($request)
+    public function __construct(Request $request)
     {
         $this->request = $request;
         $this->input = $request->all();
@@ -39,7 +34,7 @@ class AdService
     {
         $this->output = Ads::with(['photo', 'preview'])
             ->find($this->input['id'])
-            ->only(array_merge(['id', 'name','preview', 'price'], $this->input['fields'] ?? []));
+            ->only(array_merge(['id', 'name', 'preview', 'price'], $this->input['fields'] ?? []));
         return $this;
     }
 
@@ -61,6 +56,7 @@ class AdService
     {
         return new JsonResponse(['data' => $this->output], $this->statusCode);
     }
+
 
 }
 

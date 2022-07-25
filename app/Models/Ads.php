@@ -39,7 +39,7 @@ class Ads extends Model
         if (!$sortBy) {
             return $query;
         }
-        return $query->orderBy($sortBy, !$descending ? 'desc' : 'asc');
+        return $query->orderBy($sortBy, $descending ? 'desc' : 'asc');
     }
 
 }
