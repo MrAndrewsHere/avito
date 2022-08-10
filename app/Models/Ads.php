@@ -13,7 +13,7 @@ class Ads extends Model
 
     protected $fillable = ['name', 'description', 'price', 'created_at', 'updated_at'];
 
-    public function getPriceAttribute()
+    public function getPriceAttribute(): float
     {
 
         return floatval($this->attributes['price']);

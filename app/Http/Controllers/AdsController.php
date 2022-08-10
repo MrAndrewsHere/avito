@@ -9,18 +9,18 @@ use App\Services\AdService;
 
 class AdsController extends Controller
 {
-    public function index(AdViewRequest $request): \Illuminate\Http\JsonResponse
+    public function index(AdViewRequest $request, AdService $service): \Illuminate\Http\JsonResponse
     {
-        return (new AdService($request))->index()->toJsonResponse();
+        return $service->index($request)->toJsonResponse();
     }
 
-    public function get(AdGetOneRequest $request): \Illuminate\Http\JsonResponse
+    public function get(AdGetOneRequest $request, AdService $service): \Illuminate\Http\JsonResponse
     {
-        return (new AdService($request))->get()->toJsonResponse();
+        return $service->get($request)->toJsonResponse();
     }
 
-    public function store(AdStoreRequest $request): \Illuminate\Http\JsonResponse
+    public function store(AdStoreRequest $request, AdService $service): \Illuminate\Http\JsonResponse
     {
-        return (new AdService($request))->store()->toJsonResponse();
+        return $service->store($request)->toJsonResponse();
     }
 }

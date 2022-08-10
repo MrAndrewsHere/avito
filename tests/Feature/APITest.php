@@ -27,7 +27,7 @@ class APITest extends TestCase
             ->crossJoin(collect([1,0]))
             ->map(fn($i) => array_combine(['sortBy', 'descending'], array_values($i)))
             ->each(function ($payload) use ($ads, $count) {
-                $expected = $ads->sortBy($payload['sortBy'], SORT_REGULAR, !(bool)$payload['descending']  )->take(10)->map(fn($i) => [
+                $expected = $ads->sortBy($payload['sortBy'], SORT_REGULAR, $payload['descending'])->take(10)->map(fn($i) => [
                     'id' => $i['id'],
                     'name' => $i['name'],
                     'price' => $i['price'],
@@ -37,7 +37,7 @@ class APITest extends TestCase
                         'url' => $i['preview']['url'],
                     ],
                 ]);
-                //С загрузкой через loadMissing не проходит тест
+
 
                 $response = $this->getJson(
                     $this->routePrefix
@@ -63,7 +63,7 @@ class APITest extends TestCase
     public function can_get_one_ad()
     {
         $ad = Ads::factory()->create();
-        $default = ['id', 'preview', 'price'];
+        $default = ['id', 'preview','name', 'price'];
         $optional = ['description', 'photo'];
         $response = $this->getJson(
             $this->routePrefix . 'ad?'

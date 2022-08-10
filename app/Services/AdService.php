@@ -2,48 +2,43 @@
 
 namespace App\Services;
 
+use App\Http\Requests\AdGetOneRequest;
+use App\Http\Requests\AdStoreRequest;
+use App\Http\Requests\AdViewRequest;
 use App\Models\Ads;
 use App\Models\Photo;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AdService
 {
-    private $request = null;
-    private $input = null;
-    private $output = [];
+    private $output = null;
     private $statusCode = 200;
 
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-        $this->input = $request->all();
-    }
-
-    public function index(): AdService
+    public function index(AdViewRequest $request): AdService
     {
         $this->output = Ads::with(['preview'])
             ->view()
-            ->sorted($this->input['sortBy'] ?? null, (bool)$this->input['descending'] ?? null)
-            ->paginate(10)->appends($this->request->query());
+            ->sorted($request->get('sortBy') ?? null, $request->get('descending') ?? false)
+            ->paginate(10)->appends($request->query());
         return $this;
     }
 
-    public function get(): AdService
+    public function get(AdGetOneRequest $request): AdService
     {
         $this->output = Ads::with(['photo', 'preview'])
-            ->find($this->input['id'])
-            ->only(array_merge(['id', 'name', 'preview', 'price'], $this->input['fields'] ?? []));
+            ->find($request->get('id'))
+            ->only(array_merge(['id', 'preview', 'price','name'], $request->get('fields') ?? []));
         return $this;
     }
 
-    public function store(): AdService
+    public function store(AdStoreRequest $request): AdService
     {
-        $this->output = DB::transaction(function () {
-            $ad = Ads::create($this->input);
-            if ($this->input['photo']['0']['url'] ?? false) {
-                collect($this->input['photo'])->each(fn($photo) => $ad->photo()->save(Photo::make($photo)));
+        $this->output = DB::transaction(function () use ($request) {
+            $ad = Ads::create($request->all());
+
+            if ($request->has('photo')) {
+                collect($request->get('photo'))->each(fn($photo) => $ad->photo()->save(Photo::make($photo)));
             }
             return $ad->only('id');
         });
@@ -51,12 +46,29 @@ class AdService
         return $this;
     }
 
-
-    public function toJsonResponse(): JsonResponse
+    /**
+     * @param int $statusCode
+     */
+    public function setStatusCode(int $statusCode): void
     {
-        return new JsonResponse(['data' => $this->output], $this->statusCode);
+        $this->statusCode = $statusCode;
     }
 
+    /**
+     * @return null
+     */
+    public function getOutput()
+    {
+        return $this->output;
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function toJsonResponse(): JsonResponse
+    {
+        return new JsonResponse(['data' => $this->getOutput()], $this->statusCode);
+    }
 
 }
 
