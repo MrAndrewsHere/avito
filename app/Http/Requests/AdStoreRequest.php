@@ -30,8 +30,6 @@ class AdStoreRequest extends FormRequest
             'photo' => ['array', 'max:3'],
             'photo.*.url' => ['url','distinct:strict'],
             'price' => ['required','numeric']
-
-
         ];
     }
 

@@ -63,13 +63,11 @@
       <q-pagination
         v-model="pagination.page"
         color="grey-8"
-        :max="response && response.last_page"
+        :max="maxPage"
         :max-pages="6"
         size="sm"
       />
     </div>
-<!--    <span @click="$router.push('/ad/create')">Создать</span>-->
-<!--    <span @click="$router.push({path:'/ad', query:{id:1}})">Подробнее</span>-->
   </div>
 </template>
 
@@ -114,6 +112,9 @@ export default {
     paginatorHash(){
       return JSON.stringify(this.pagination)
     },
+    maxPage(){
+      return this.response && this.response.meta.last_page || 0
+    },
     currentSort() {
       return {
         sortBy: this.pagination.sortBy,
@@ -143,7 +144,7 @@ export default {
           descending: this.pagination?.descending ? 1 : 0
         }
       })).then(res => {
-        this.response = res.data.data
+        this.response = res.data
       })
     }
   },

@@ -6,18 +6,14 @@ namespace App\Models;
 use App\Traits\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Ads extends Model
+class Ad extends Model
 {
     use HasFactory;
 
 
+    protected $with = ['preview'];
     protected $fillable = ['name', 'description', 'price', 'created_at', 'updated_at'];
 
-    public function getPriceAttribute(): float
-    {
-
-        return floatval($this->attributes['price']);
-    }
 
     public function preview(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
@@ -29,7 +25,7 @@ class Ads extends Model
         return $this->hasMany(Photo::class, 'ad_id', 'id');
     }
 
-    public function scopeView($query)
+    public function scopeForCollection($query)
     {
         return $query->select('id', 'name', 'price');
     }

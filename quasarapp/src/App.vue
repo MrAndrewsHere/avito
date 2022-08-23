@@ -10,11 +10,11 @@ export default defineComponent({
 
 
     axios.interceptors.response.use(res => {
+      console.log(res)
       switch (res.data?.code) {
         case 422: {
           const msgs = Object.values(res.data.data).join(' ')
           this.$q.notify({
-
             message: msgs
           })
           break
@@ -28,7 +28,6 @@ export default defineComponent({
       switch (error.response.status) {
         case 404: {
           this.$q.notify({
-
             message: 'Not found'
           })
           break

@@ -2,16 +2,16 @@
 
 namespace Tests\Unit\Http\Requests;
 
-use App\Models\Ads;
+use App\Models\Ad;
 use Illuminate\Support\Str;
 use Tests\RequestTest;
 
 
 class AdStoreRequestTest extends RequestTest
 {
-    protected string $url = '/api/v1/ad';
-    protected $model = Ads::class;
-    protected string $method = 'post';
+    protected $url = '/api/v1/ad';
+    protected $model = Ad::class;
+    protected $method = 'post';
 
     /** @test */
     public function name_filed_required()

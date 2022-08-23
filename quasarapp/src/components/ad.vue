@@ -9,7 +9,7 @@
                     style=";font-weight: 500;font-size: 25px;">{{ ad && ad.name }}
       </q-item-label>
       <q-item-label class="text-body2 q-py-sm">
-        {{ ad.price && ad.price+'руб.' }}
+        {{ ad.price && ad.price+' руб.' }}
       </q-item-label>
       <q-item-label class="text-body1 q-py-sm">
         {{ ad && ad.description }}

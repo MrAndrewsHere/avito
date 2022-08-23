@@ -5,22 +5,31 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AdGetOneRequest;
 use App\Http\Requests\AdStoreRequest;
 use App\Http\Requests\AdViewRequest;
+use App\Http\Resources\AdCollection;
+use App\Http\Resources\AdResource;
 use App\Services\AdService;
 
 class AdsController extends Controller
 {
-    public function index(AdViewRequest $request, AdService $service): \Illuminate\Http\JsonResponse
+    private $service = null;
+
+    public function __construct(AdService $service)
     {
-        return $service->index($request)->toJsonResponse();
+        $this->service = $service;
     }
 
-    public function get(AdGetOneRequest $request, AdService $service): \Illuminate\Http\JsonResponse
+    public function index(AdViewRequest $request)
     {
-        return $service->get($request)->toJsonResponse();
+        return new AdCollection($this->service->index($request->all(), $request->query()));
     }
 
-    public function store(AdStoreRequest $request, AdService $service): \Illuminate\Http\JsonResponse
+    public function get(AdGetOneRequest $request)
     {
-        return $service->store($request)->toJsonResponse();
+        return new AdResource($this->service->get($request->all()));
+    }
+
+    public function store(AdStoreRequest $request)
+    {
+        return response()->json(['data' => $this->service->store($request->all())], 201);
     }
 }

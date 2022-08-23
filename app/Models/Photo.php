@@ -15,6 +15,6 @@ class Photo extends Model
 
     public function ad()
     {
-        return $this->belongsTo(Ads::class, 'id', 'ad_id');
+        return $this->belongsTo(Ad::class, 'id', 'ad_id');
     }
 }

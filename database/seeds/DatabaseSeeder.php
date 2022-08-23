@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Ads;
+use App\Models\Ad;
 use App\Models\Photo;
 use Illuminate\Database\Seeder;
 
@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Ads::factory(1000)->create()
+        Ad::factory(1000)->create()
             ->random(500)
             ->each(function ($ad) {
                 $ad->photo()->saveMany(Photo::factory(random_int(1, 3))->make());

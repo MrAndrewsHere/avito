@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Ads;
+use App\Models\Ad;
 use App\Models\Photo;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,13 +13,13 @@ class APITest extends TestCase
 
     use RefreshDatabase;
 
-    private string $routePrefix = '/api/v1/';
+    private $routePrefix = '/api/v1/';
 
     /** @test */
     public function test_can_view_ads()
     {
         $count = 31;
-        $ads = Ads::factory($count)->create()->each(function ($ad) {
+        $ads = Ad::factory($count)->create()->each(function ($ad) {
             $ad->photo()->saveMany(Photo::factory(random_int(1, 3))->make());
         });
 
@@ -47,13 +47,14 @@ class APITest extends TestCase
                     )
                 );
 
-                $response->assertOk()->assertJson([
-                    'data' => [
+                $response->assertOk();
+                $response->assertJson([
+                    'data' => $expected->values()->toArray(),
+                    'meta' => [
                         'current_page' => 1,
                         'last_page' => 4,
                         'per_page' => 10,
                         'total' => $count,
-                        'data' => $expected->values()->toArray(),
                     ]
                 ]);
             });
@@ -62,7 +63,7 @@ class APITest extends TestCase
     /** @test */
     public function can_get_one_ad()
     {
-        $ad = Ads::factory()->create();
+        $ad = Ad::factory()->create();
         $default = ['id', 'preview','name', 'price'];
         $optional = ['description', 'photo'];
         $response = $this->getJson(
@@ -81,7 +82,7 @@ class APITest extends TestCase
     /**test */
     public function test_can_store_ad()
     {
-        $ad = Ads::factory()->make();
+        $ad = Ad::factory()->make();
         $response = $this->postJson($this->routePrefix . 'ad', array_merge($ad->toArray()));
         $response->assertCreated();
         $response->assertCreated()->assertJsonStructure(['data' => ['id']]);
@@ -91,7 +92,7 @@ class APITest extends TestCase
     /**test */
     public function test_can_store_ad_with_photo()
     {
-        $ad = Ads::factory()->make();
+        $ad = Ad::factory()->make();
         $photo = Photo::factory(random_int(1, 3))->make();
         $response = $this->postJson($this->routePrefix . 'ad', array_merge($ad->toArray(), ['photo' => $photo->toArray()]));
         $response->assertCreated()->assertJsonStructure(['data' => ['id']]);

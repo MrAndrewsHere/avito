@@ -7,7 +7,6 @@ use Illuminate\Validation\Rule;
 
 class AdViewRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -34,7 +33,7 @@ class AdViewRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'descending' => (bool)$this->descending,
+            'descending' => (bool)$this->descending
         ]);
     }
 }

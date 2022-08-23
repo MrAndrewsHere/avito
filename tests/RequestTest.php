@@ -14,6 +14,6 @@ class RequestTest extends TestCase
 
     protected $data = [];
     protected $model = null;
-    protected string $method = 'get';
+    protected $method = 'get';
 
 }
